@@ -110,6 +110,24 @@ public static class SymbolResolver
             _ => true
         };
 
+    public static async Task<ISymbol?> ResolveMethodByNameAsync(
+        WorkspaceManager workspace,
+        string methodName,
+        string? className,
+        CancellationToken ct)
+    {
+        var candidates = await FindSymbolsByNameAsync(workspace, methodName, "method", ct);
+
+        if (className is not null)
+        {
+            candidates = candidates
+                .Where(s => s.ContainingType?.Name.Equals(className, StringComparison.OrdinalIgnoreCase) == true)
+                .ToList();
+        }
+
+        return candidates.Count > 0 ? candidates[0] : null;
+    }
+
     public static async Task<IReadOnlyList<ReferencedSymbol>> FindReferencesAsync(
         WorkspaceManager workspace,
         ISymbol symbol,
