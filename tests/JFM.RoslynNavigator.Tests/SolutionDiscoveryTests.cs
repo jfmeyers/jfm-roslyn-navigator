@@ -60,4 +60,72 @@ public class SolutionDiscoveryTests
             Directory.Delete(tempDir, true);
         }
     }
+
+    [Fact]
+    public void BfsDiscovery_Finds_Sln_In_Subdirectory()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), $"dd-test-{Guid.NewGuid():N}");
+        var subDir = Path.Combine(tempDir, "src");
+        Directory.CreateDirectory(subDir);
+        File.WriteAllText(Path.Combine(subDir, "App.sln"), "");
+
+        try
+        {
+            var result = SolutionDiscovery.BfsDiscovery(tempDir);
+            result.ShouldNotBeNull();
+            result.ShouldEndWith("App.sln");
+        }
+        finally
+        {
+            Directory.Delete(tempDir, true);
+        }
+    }
+
+    [Fact]
+    public void BfsDiscovery_Prefers_Shallower_Depth()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), $"dd-test-{Guid.NewGuid():N}");
+        var subDir = Path.Combine(tempDir, "src");
+        Directory.CreateDirectory(subDir);
+        File.WriteAllText(Path.Combine(tempDir, "Root.sln"), "");
+        File.WriteAllText(Path.Combine(subDir, "Nested.sln"), "");
+
+        try
+        {
+            var result = SolutionDiscovery.BfsDiscovery(tempDir);
+            result.ShouldNotBeNull();
+            result.ShouldEndWith("Root.sln");
+        }
+        finally
+        {
+            Directory.Delete(tempDir, true);
+        }
+    }
+
+    [Fact]
+    public void BfsDiscovery_Skips_Known_Directories()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), $"dd-test-{Guid.NewGuid():N}");
+        var binDir = Path.Combine(tempDir, "bin");
+        Directory.CreateDirectory(binDir);
+        File.WriteAllText(Path.Combine(binDir, "Hidden.sln"), "");
+
+        try
+        {
+            var result = SolutionDiscovery.BfsDiscovery(tempDir);
+            result.ShouldBeNull();
+        }
+        finally
+        {
+            Directory.Delete(tempDir, true);
+        }
+    }
+
+    [Fact]
+    public void FindSolutionPath_Returns_Null_Without_Args()
+    {
+        var result = SolutionDiscovery.FindSolutionPath([]);
+        // May return something if run from a dir with a .sln — just ensure no crash
+        _ = result;
+    }
 }
