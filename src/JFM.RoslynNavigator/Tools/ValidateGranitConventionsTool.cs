@@ -98,7 +98,7 @@ public static class ValidateGranitConventionsTool
                 continue;
 
             AnalyzeSyntaxTree(syntaxTree, compilation, checkCategory, violations, ct);
-            await AnalyzeStructuralConventionsAsync(syntaxTree, project, compilation, checkCategory, violations, ct);
+            await AnalyzeStructuralConventionsAsync(syntaxTree, checkCategory, violations, ct);
         }
     }
 
@@ -143,8 +143,6 @@ public static class ValidateGranitConventionsTool
 
     private static async Task AnalyzeStructuralConventionsAsync(
         SyntaxTree syntaxTree,
-        Project project,
-        Compilation compilation,
         string checkCategory,
         List<ConventionViolation> violations,
         CancellationToken ct)

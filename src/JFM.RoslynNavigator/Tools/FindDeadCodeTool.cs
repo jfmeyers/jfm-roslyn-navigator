@@ -58,7 +58,7 @@ public static class FindDeadCodeTool
             var compilation = await workspace.GetCompilationAsync(project, ct);
             if (compilation is null) continue;
 
-            await AnalyzeProjectForDeadCodeAsync(compilation, solution, workspace, project, kind, maxResults, entries, ct);
+            await AnalyzeProjectForDeadCodeAsync(compilation, solution, project, kind, maxResults, entries, ct);
         }
 
         var result = new DeadCodeResult(entries, entries.Count);
@@ -68,7 +68,6 @@ public static class FindDeadCodeTool
     private static async Task AnalyzeProjectForDeadCodeAsync(
         Compilation compilation,
         Solution solution,
-        WorkspaceManager workspace,
         Project project,
         string kind,
         int maxResults,

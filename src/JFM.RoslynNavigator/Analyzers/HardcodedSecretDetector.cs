@@ -87,23 +87,31 @@ public sealed class HardcodedSecretDetector : IAntiPatternDetector
 
             foreach (var propAssign in initializer.Expressions.OfType<AssignmentExpressionSyntax>())
             {
-                if (propAssign.Right is not LiteralExpressionSyntax literal)
-                    continue;
-
-                if (!literal.IsKind(SyntaxKind.StringLiteralExpression))
-                    continue;
-
-                var name = propAssign.Left is IdentifierNameSyntax id ? id.Identifier.Text : null;
-                if (name is null || !IsSensitiveName(name))
-                    continue;
-
-                if (IsPlaceholderOrEmpty(literal.Token.ValueText))
-                    continue;
-
-                var line = propAssign.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-                yield return CreateViolation(name, filePath, line);
+                var violation = CheckInitializerAssignment(propAssign, filePath);
+                if (violation is not null)
+                    yield return violation;
             }
         }
+    }
+
+    private static AntiPatternViolation? CheckInitializerAssignment(
+        AssignmentExpressionSyntax propAssign, string? filePath)
+    {
+        if (propAssign.Right is not LiteralExpressionSyntax literal)
+            return null;
+
+        if (!literal.IsKind(SyntaxKind.StringLiteralExpression))
+            return null;
+
+        var name = propAssign.Left is IdentifierNameSyntax id ? id.Identifier.Text : null;
+        if (name is null || !IsSensitiveName(name))
+            return null;
+
+        if (IsPlaceholderOrEmpty(literal.Token.ValueText))
+            return null;
+
+        var line = propAssign.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+        return CreateViolation(name, filePath, line);
     }
 
     private static string? GetAssignmentTargetName(AssignmentExpressionSyntax assignment) =>
