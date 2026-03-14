@@ -179,14 +179,9 @@ public static class FindDeadCodeTool
 
     private static bool HasTestAttribute(IMethodSymbol methodSymbol)
     {
-        foreach (var attr in methodSymbol.GetAttributes())
-        {
-            if (attr.AttributeClass?.Name is not null &&
-                TestAttributes.Contains(attr.AttributeClass.Name.Replace("Attribute", "")))
-                return true;
-        }
-
-        return false;
+        return methodSymbol.GetAttributes()
+            .Where(attr => attr.AttributeClass?.Name is not null)
+            .Any(attr => TestAttributes.Contains(attr.AttributeClass!.Name.Replace("Attribute", "")));
     }
 
     private static List<Project> GetProjectsInScope(Solution solution, string scope, string? path)
