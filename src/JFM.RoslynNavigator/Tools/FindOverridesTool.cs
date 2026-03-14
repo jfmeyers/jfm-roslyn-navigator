@@ -21,16 +21,7 @@ public static class FindOverridesTool
         var status = workspace.EnsureReadyOrStatus(ct);
         if (status is not null) return status;
 
-        var candidates = await SymbolResolver.FindSymbolsByNameAsync(workspace, methodName, "method", ct);
-
-        if (className is not null)
-        {
-            candidates = candidates
-                .Where(s => s.ContainingType?.Name.Equals(className, StringComparison.OrdinalIgnoreCase) == true)
-                .ToList();
-        }
-
-        var symbol = candidates.Count > 0 ? candidates[0] : null;
+        var symbol = await SymbolResolver.ResolveMethodByNameAsync(workspace, methodName, className, ct);
         if (symbol is null)
             return JsonSerializer.Serialize(new OverridesResult(methodName, [], 0));
 
