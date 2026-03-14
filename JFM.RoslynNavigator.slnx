@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/JFM.RoslynNavigator/JFM.RoslynNavigator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/JFM.RoslynNavigator.Tests/JFM.RoslynNavigator.Tests.csproj" />
+  </Folder>
+</Solution>
