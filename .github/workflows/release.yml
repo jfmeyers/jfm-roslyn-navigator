@@ -5,7 +5,7 @@ on:
     tags: ['v*']
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   publish:
@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -34,3 +36,35 @@ jobs:
 
       - name: Push to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-version:refname | head -2 | tail -1)
+          if [ "$PREVIOUS_TAG" = "${{ github.ref_name }}" ]; then
+            echo "body<<EOF" >> "$GITHUB_OUTPUT"
+            git log --pretty=format:'- %s (%h)' >> "$GITHUB_OUTPUT"
+            echo "" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          else
+            echo "body<<EOF" >> "$GITHUB_OUTPUT"
+            git log --pretty=format:'- %s (%h)' "${PREVIOUS_TAG}..${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+            echo "" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: |
+            ## Install
+
+            ```bash
+            dotnet tool install --global JFM.RoslynNavigator --version ${{ github.ref_name }}
+            ```
+
+            ## Changes
+
+            ${{ steps.changelog.outputs.body }}
+          files: ./nupkgs/*.nupkg
