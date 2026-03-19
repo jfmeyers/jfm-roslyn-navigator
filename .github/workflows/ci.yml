@@ -65,7 +65,9 @@ jobs:
           dotnet test --no-build -c Release \
             --logger "trx;LogFileName=results.trx" \
             --collect:"XPlat Code Coverage" \
-            --settings tests/coverlet.runsettings
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover \
+               DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[RoslynLens]*" \
+               DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*.Tests]*"
 
       - name: SonarCloud End
         if: env.SONAR_TOKEN != ''
