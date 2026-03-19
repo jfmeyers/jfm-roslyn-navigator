@@ -51,7 +51,7 @@ jobs:
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" \
-            /d:sonar.coverage.exclusions="**/Tests/**,**/Tools/**,**/Program.cs,**/WorkspaceInitializer.cs,**/WorkspaceManager.cs,**/Responses/**,**/DuplicateCodeDetector.cs,**/ExternalSourceResolver.cs" \
+            /d:sonar.coverage.exclusions="**/Tests/**,**/Tools/**,**/Program.cs,**/WorkspaceInitializer.cs,**/WorkspaceManager.cs,**/Responses/**,**/DuplicateCodeDetector.cs,**/ExternalSourceResolver.cs,**/SymbolResolver.cs" \
             /d:sonar.exclusions="**/.github/**,global.json" \
             /d:sonar.qualitygate.wait=true
         env:
