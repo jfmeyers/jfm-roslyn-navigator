@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RoslynLens/RoslynLens.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RoslynLens.Tests/RoslynLens.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -2,14 +2,28 @@
 
 ## find_symbol
 
-Locate type or method definitions by name.
+Locate type or method definitions by name. Supports **glob patterns** and
+**fuzzy FQN resolution**.
 
 | Parameter | Type | Required | Description |
 | --------- | ---- | -------- | ----------- |
-| `name` | string | yes | Symbol name to search for |
+| `name` | string | yes | Symbol name, glob pattern (`*Service`, `Get*`), or partial FQN |
 | `kind` | string | no | Filter by kind: `class`, `interface`, `method`, `property`, `enum` |
 
-**Example prompt:** "Find the IClock interface"
+### Search modes
+
+| Input | Mode | Example |
+| ----- | ---- | ------- |
+| Plain name | Exact + case-insensitive | `WorkspaceManager` |
+| Contains `*` or `?` | Glob pattern | `*Service`, `Get?oo` |
+| Typo (auto) | Fuzzy fallback (Levenshtein <= 2) | `WorkspaceManger` → `WorkspaceManager` |
+| Dotted name | Partial namespace match | `RoslynLens.SymbolResolver` |
+
+**Example prompts:**
+
+- "Find the IClock interface"
+- "Find all types ending with Service" → `name = "*Service"`
+- "Find all Get methods" → `name = "Get*"`, `kind = "method"`
 
 **Returns:** File path, line number, kind, and containing namespace for each match.
 

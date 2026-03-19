@@ -2,14 +2,14 @@
 
 ## 1. Create the detector
 
-Create `src/JFM.RoslynNavigator/Analyzers/MyDetector.cs`:
+Create `src/RoslynLens/Analyzers/MyDetector.cs`:
 
 ```csharp
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace JFM.RoslynNavigator.Analyzers;
+namespace RoslynLens.Analyzers;
 
 public class MyDetector : IAntiPatternDetector
 {
@@ -46,14 +46,14 @@ public class MyDetector : IAntiPatternDetector
 
 ## 2. Create the test
 
-Create `tests/JFM.RoslynNavigator.Tests/Analyzers/MyDetectorTests.cs`:
+Create `tests/RoslynLens.Tests/Analyzers/MyDetectorTests.cs`:
 
 ```csharp
-using JFM.RoslynNavigator.Analyzers;
+using RoslynLens.Analyzers;
 using Microsoft.CodeAnalysis.CSharp;
 using Shouldly;
 
-namespace JFM.RoslynNavigator.Tests.Analyzers;
+namespace RoslynLens.Tests.Analyzers;
 
 public class MyDetectorTests
 {

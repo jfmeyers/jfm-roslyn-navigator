@@ -46,12 +46,13 @@ jobs:
         if: env.SONAR_TOKEN != ''
         run: |
           dotnet sonarscanner begin \
-            /k:"jfmeyers_jfm-roslyn-navigator" \
+            /k:"jfmeyers_roslyn-lens" \
             /o:"jfmeyers" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" \
-            /d:sonar.coverage.exclusions="**/Tests/**,**/Tools/**,**/Program.cs,**/WorkspaceInitializer.cs,**/WorkspaceManager.cs" \
+            /d:sonar.coverage.exclusions="**/Tests/**,**/Tools/**,**/Program.cs,**/WorkspaceInitializer.cs,**/WorkspaceManager.cs,**/Responses/**,**/DuplicateCodeDetector.cs,**/ExternalSourceResolver.cs,**/SymbolResolver.cs,**/EfCoreNoTrackingDetector.cs,**/SynchronousSaveChangesDetector.cs,**/MissingConfigureAwaitDetector.cs" \
+            /d:sonar.exclusions="**/.github/**,global.json" \
             /d:sonar.qualitygate.wait=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -64,7 +65,9 @@ jobs:
           dotnet test --no-build -c Release \
             --logger "trx;LogFileName=results.trx" \
             --collect:"XPlat Code Coverage" \
-            --settings tests/coverlet.runsettings
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover \
+               DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Include="[RoslynLens]*" \
+               DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Exclude="[*.Tests]*"
 
       - name: SonarCloud End
         if: env.SONAR_TOKEN != ''

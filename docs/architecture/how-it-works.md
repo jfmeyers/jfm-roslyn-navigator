@@ -2,7 +2,7 @@
 
 ## Overview
 
-JFM.RoslynNavigator is an MCP (Model Context Protocol) server that uses Roslyn to
+RoslynLens is an MCP (Model Context Protocol) server that uses Roslyn to
 provide semantic code navigation. Instead of Claude Code reading entire `.cs` files
 (500-2000+ tokens each), it queries this server and receives focused results
 (30-150 tokens).

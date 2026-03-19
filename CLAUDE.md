@@ -1,12 +1,12 @@
-# CLAUDE.md — JFM.RoslynNavigator
+# CLAUDE.md — RoslynLens
 
 ## Project
 
 - **Type**: MCP server for token-efficient .NET codebase navigation via Roslyn
-- **Distribution**: Global dotnet tool (`jfm-roslyn-navigator`)
+- **Distribution**: Global dotnet tool (`roslyn-lens`)
 - **License**: Apache-2.0
-- **NuGet**: `JFM.RoslynNavigator`
-- **GitHub**: `jfmeyers/jfm-roslyn-navigator`
+- **NuGet**: `RoslynLens`
+- **GitHub**: `jfmeyers/roslyn-lens`
 
 ## Stack
 
@@ -18,7 +18,7 @@
 dotnet build
 dotnet test
 dotnet pack -c Release -o ./nupkgs
-dotnet tool install --global --add-source ./nupkgs JFM.RoslynNavigator
+dotnet tool install --global --add-source ./nupkgs RoslynLens
 ```
 
 ## Architecture
@@ -30,7 +30,7 @@ dotnet tool install --global --add-source ./nupkgs JFM.RoslynNavigator
 | `WorkspaceManager.cs` | MSBuildWorkspace, LRU compilation cache (50) |
 | `WorkspaceInitializer.cs` | BackgroundService for async solution loading |
 | `SymbolResolver.cs` | Cross-project symbol resolution with file/line disambiguation |
-| `Tools/` | 17 MCP tool implementations (one class per tool) |
+| `Tools/` | 28 MCP tool implementations (one class per tool) |
 | `Analyzers/` | 19 anti-pattern detectors (one class per detector) |
 | `Responses/` | Token-optimized DTOs (records) |
 
@@ -60,7 +60,7 @@ dotnet tool install --global --add-source ./nupkgs JFM.RoslynNavigator
 ## Release
 
 ```bash
-# 1. Update <Version> in JFM.RoslynNavigator.csproj
+# 1. Update <Version> in RoslynLens.csproj
 # 2. Commit and push
 # 3. Tag and push — triggers CI + NuGet publish + GitHub Release
 git tag v0.2.0

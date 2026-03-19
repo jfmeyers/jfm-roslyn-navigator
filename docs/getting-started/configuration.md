@@ -5,7 +5,7 @@
 Registers the MCP server globally, available in all projects:
 
 ```bash
-claude mcp add --scope user --transport stdio roslyn-navigator -- jfm-roslyn-navigator
+claude mcp add --scope user --transport stdio roslyn-lens -- roslyn-lens
 ```
 
 ## Claude Code — Project scope
@@ -13,7 +13,7 @@ claude mcp add --scope user --transport stdio roslyn-navigator -- jfm-roslyn-nav
 Registers for a single project only:
 
 ```bash
-claude mcp add --transport stdio roslyn-navigator -- jfm-roslyn-navigator
+claude mcp add --transport stdio roslyn-lens -- roslyn-lens
 ```
 
 ## Manual `.mcp.json`
@@ -23,9 +23,9 @@ Create `.mcp.json` in your project root:
 ```json
 {
   "mcpServers": {
-    "roslyn-navigator": {
+    "roslyn-lens": {
       "type": "stdio",
-      "command": "jfm-roslyn-navigator",
+      "command": "roslyn-lens",
       "args": []
     }
   }
@@ -40,7 +40,7 @@ search from the current directory (up to 3 levels).
 To specify a solution explicitly:
 
 ```bash
-claude mcp add --scope user --transport stdio roslyn-navigator -- jfm-roslyn-navigator --solution /path/to/My.slnx
+claude mcp add --scope user --transport stdio roslyn-lens -- roslyn-lens --solution /path/to/My.slnx
 ```
 
 ## Verify connection
@@ -52,11 +52,11 @@ claude mcp list
 Expected output:
 
 ```text
-roslyn-navigator: jfm-roslyn-navigator — Connected
+roslyn-lens: roslyn-lens — Connected
 ```
 
 ## Remove
 
 ```bash
-claude mcp remove roslyn-navigator
+claude mcp remove roslyn-lens
 ```

@@ -2,14 +2,14 @@
 
 ## 1. Create the tool
 
-Create `src/JFM.RoslynNavigator/Tools/MyTool.cs`:
+Create `src/RoslynLens/Tools/MyTool.cs`:
 
 ```csharp
 using System.ComponentModel;
 using ModelContextProtocol.Server;
-using JFM.RoslynNavigator.Responses;
+using RoslynLens.Responses;
 
-namespace JFM.RoslynNavigator.Tools;
+namespace RoslynLens.Tools;
 
 [McpServerToolType]
 public static class MyTool

@@ -7,32 +7,32 @@
 ## Install from NuGet
 
 ```bash
-dotnet tool install --global JFM.RoslynNavigator
+dotnet tool install --global RoslynLens
 ```
 
 ## Install from source
 
 ```bash
-git clone https://github.com/jfmeyers/jfm-roslyn-navigator.git
-cd jfm-roslyn-navigator
+git clone https://github.com/jfmeyers/roslyn-lens.git
+cd roslyn-lens
 dotnet pack -c Release -o ./nupkgs
-dotnet tool install --global --add-source ./nupkgs JFM.RoslynNavigator
+dotnet tool install --global --add-source ./nupkgs RoslynLens
 ```
 
 ## Verify installation
 
 ```bash
-jfm-roslyn-navigator --help
+roslyn-lens --help
 ```
 
 ## Update
 
 ```bash
-dotnet tool update --global JFM.RoslynNavigator
+dotnet tool update --global RoslynLens
 ```
 
 ## Uninstall
 
 ```bash
-dotnet tool uninstall --global JFM.RoslynNavigator
+dotnet tool uninstall --global RoslynLens
 ```

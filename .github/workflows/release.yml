@@ -66,7 +66,7 @@ jobs:
             ## Install
 
             ```bash
-            dotnet tool install --global JFM.RoslynNavigator --version ${{ github.ref_name }}
+            dotnet tool install --global RoslynLens --version ${{ github.ref_name }}
             ```
 
             ## Changes
