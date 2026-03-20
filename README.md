@@ -5,9 +5,14 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jfmeyers_roslyn-lens&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jfmeyers_roslyn-lens)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-A token-efficient MCP (Model Context Protocol) server for .NET codebase navigation, powered by Roslyn semantic analysis. Designed for use with [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+A token-efficient MCP (Model Context Protocol) server for .NET codebase
+navigation, powered by Roslyn semantic analysis. Designed for use with
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
-Instead of reading entire `.cs` files (500-2000+ tokens each), Claude Code queries this MCP server and receives focused, semantic results (30-150 tokens). This dramatically reduces token consumption when working with large .NET solutions.
+Instead of reading entire `.cs` files (500-2000+ tokens each), Claude Code
+queries this MCP server and receives focused, semantic results (30-150
+tokens). This dramatically reduces token consumption when working with
+large .NET solutions.
 
 ## Features
 
@@ -24,7 +29,7 @@ Instead of reading entire `.cs` files (500-2000+ tokens each), Claude Code queri
 | `get_type_hierarchy` | Show inheritance chain, interfaces, and derived types |
 | `get_public_api` | Get public surface without reading the full file |
 | `get_symbol_detail` | Full signature, parameters, return type, and XML docs |
-| `get_project_graph` | Solution dependency tree |
+| `get_project_graph` | Solution dependency tree (with filtering for large solutions) |
 | `get_dependency_graph` | Method call chain visualization |
 | `get_diagnostics` | Compiler warnings and errors |
 | `get_test_coverage_map` | Heuristic test coverage mapping |
@@ -115,7 +120,9 @@ Or via `.mcp.json` in your project root:
 
 ### Solution Discovery
 
-The server automatically finds the nearest `.sln` or `.slnx` file using BFS from the current directory (max 3 levels up). You can also specify a solution explicitly:
+The server automatically finds the nearest `.sln` or `.slnx` file using
+BFS from the current directory (max 3 levels up). You can also specify a
+solution explicitly:
 
 ```bash
 roslyn-lens --solution /path/to/MySolution.slnx
@@ -158,7 +165,7 @@ Environment variables for runtime tuning:
 
 ## Architecture
 
-```
+```text
 src/RoslynLens/
 ├── Program.cs                  # Host + MCP stdio transport
 ├── SolutionDiscovery.cs        # BFS .sln/.slnx auto-discovery
@@ -177,14 +184,21 @@ src/RoslynLens/
 
 Key design decisions:
 
-- **Lazy compilation**: Solutions with 50+ projects only compile on-demand (LRU cache of 50 compilations)
-- **File watcher**: `.cs` changes trigger incremental text updates; `.csproj` changes trigger full reload
-- **Background loading**: Solution loads asynchronously; tools return "loading" status until ready
-- **Logs to stderr**: All logging goes to stderr to keep stdout clean for JSON-RPC
+- **Lazy compilation**: Solutions with 50+ projects only compile
+  on-demand (LRU cache of 50 compilations)
+- **File watcher**: `.cs` changes trigger incremental text updates;
+  `.csproj` changes trigger full reload
+- **Background loading**: Solution loads asynchronously; tools return
+  "loading" status until ready
+- **Logs to stderr**: All logging goes to stderr to keep stdout clean
+  for JSON-RPC
 
 ## Acknowledgments
 
-Inspired by [CWM.RoslynNavigator](https://github.com/codewithmukesh/dotnet-claude-kit/tree/main/mcp/CWM.RoslynNavigator) by Mukesh Murugan (MIT License). Adapted with additional detectors, auto-discovery, and global tool distribution.
+Inspired by
+[CWM.RoslynNavigator](https://github.com/codewithmukesh/dotnet-claude-kit/tree/main/mcp/CWM.RoslynNavigator)
+by Mukesh Murugan (MIT License). Adapted with additional detectors,
+auto-discovery, and global tool distribution.
 
 ## Documentation
 

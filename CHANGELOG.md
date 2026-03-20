@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-03-20
+
+### Changed
+
+- `get_project_graph` now supports filtering by project name (`projectFilter`),
+  transitive dependency expansion (`includeTransitive`), and result limiting
+  (`maxResults`, default 50) to prevent output overflow on large solutions
+
 ## [1.0.0] - 2026-03-19
 
 ### Added
@@ -42,9 +50,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2026-03-14
 
+Initial release as `JFM.RoslynNavigator`.
+
 ### Added
 
-- Initial release — Roslyn MCP server for Claude Code
+- 17 MCP navigation tools (find_symbol, find_references, find_callers,
+  find_implementations, find_overrides, find_dead_code, get_public_api,
+  get_symbol_detail, get_project_graph, get_dependency_graph,
+  get_module_depends_on, get_type_hierarchy, get_diagnostics,
+  get_test_coverage_map, detect_antipatterns, detect_circular_dependencies,
+  validate_granit_conventions)
+- 18 anti-pattern detectors
+- MSBuildWorkspace with LRU compilation cache
+- BFS solution auto-discovery (`.sln`/`.slnx`, max 3 levels)
+- Background async solution loading
+- GitHub Actions CI/CD (build + release + NuGet publish)
+- Global dotnet tool distribution (`dotnet tool install --global JFM.RoslynNavigator`)
 
+[1.1.0]: https://github.com/jfmeyers/roslyn-lens/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/jfmeyers/roslyn-lens/compare/v0.1.1...v1.0.0
 [0.1.1]: https://github.com/jfmeyers/roslyn-lens/releases/tag/v0.1.1

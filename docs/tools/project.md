@@ -2,15 +2,25 @@
 
 ## get_project_graph
 
-Show the solution's project dependency tree.
+Show the solution's project dependency tree. Supports filtering for large
+solutions (100+ projects) to avoid output overflow.
 
 | Parameter | Type | Required | Description |
 | --------- | ---- | -------- | ----------- |
-| (none) | | | |
+| `projectFilter` | string | no | Comma-separated project name filter (substring match, e.g. `Granit.AI,Granit.Core`) |
+| `includeTransitive` | bool | no | Include transitive dependencies of filtered projects (default: `false`) |
+| `maxResults` | int | no | Maximum projects to return (default: `50`) |
 
-**Example prompt:** "Show the project dependency graph"
+**Example prompts:**
 
-**Returns:** Each project with its direct project references.
+- "Show the project dependency graph" (returns first 50 projects)
+- "Show project graph for Granit.AI modules" → `projectFilter: "Granit.AI"`
+- "Show Granit.Security and all its dependencies" →
+  `projectFilter: "Granit.Security", includeTransitive: true`
+
+**Returns:** Each project with its name, target framework, and direct project
+references. `Total` reflects the full count of matching projects (even if
+truncated by `maxResults`).
 
 ---
 
