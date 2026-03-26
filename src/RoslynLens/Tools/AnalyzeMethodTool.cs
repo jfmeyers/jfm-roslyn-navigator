@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,7 +24,7 @@ public static class AnalyzeMethodTool
 
         var symbol = await SymbolResolver.ResolveMethodByNameAsync(workspace, methodName, className, ct);
         if (symbol is null)
-            return JsonSerializer.Serialize(new { error = $"Method '{methodName}' not found" });
+            return Json.Serialize(new { error = $"Method '{methodName}' not found" });
 
         // Symbol detail
         var location = SymbolResolver.GetLocation(symbol);
@@ -76,6 +75,6 @@ public static class AnalyzeMethodTool
         }
 
         var result = new MethodAnalysis(detail, callers, dependencies, complexity);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

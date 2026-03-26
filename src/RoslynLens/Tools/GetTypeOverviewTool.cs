@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -22,7 +21,7 @@ public static class GetTypeOverviewTool
 
         var symbol = await SymbolResolver.ResolveSymbolAsync(workspace, typeName, ct: ct);
         if (symbol is not INamedTypeSymbol typeSymbol)
-            return JsonSerializer.Serialize(new { error = $"Type '{typeName}' not found" });
+            return Json.Serialize(new { error = $"Type '{typeName}' not found" });
 
         var api = BuildPublicApi(typeSymbol);
         var solution = workspace.GetSolution()!;
@@ -31,7 +30,7 @@ public static class GetTypeOverviewTool
         var diagnostics = await BuildDiagnosticsAsync(typeSymbol, workspace, solution, ct);
 
         var result = new TypeOverview(api, hierarchy, implementations, diagnostics);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static PublicApiResult BuildPublicApi(INamedTypeSymbol typeSymbol)

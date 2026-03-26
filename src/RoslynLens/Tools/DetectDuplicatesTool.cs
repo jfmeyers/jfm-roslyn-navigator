@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using ModelContextProtocol.Server;
 
@@ -25,6 +24,6 @@ public static class DetectDuplicatesTool
 
         var totalDuplicates = groups.Sum(g => g.Occurrences.Count);
         var result = new DuplicatesResult(groups, groups.Count, totalDuplicates);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

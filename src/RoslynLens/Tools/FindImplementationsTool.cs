@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -26,7 +25,7 @@ public static class FindImplementationsTool
         symbol ??= await SymbolResolver.ResolveSymbolAsync(workspace, interfaceName, kind: "class", ct: ct);
 
         if (symbol is not INamedTypeSymbol typeSymbol)
-            return JsonSerializer.Serialize(new ImplementationsResult(interfaceName, [], 0));
+            return Json.Serialize(new ImplementationsResult(interfaceName, [], 0));
 
         var solution = workspace.GetSolution()!;
 
@@ -55,6 +54,6 @@ public static class FindImplementationsTool
         }).ToList();
 
         var result = new ImplementationsResult(typeSymbol.ToDisplayString(), implementations, implementations.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

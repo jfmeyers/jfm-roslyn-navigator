@@ -58,11 +58,11 @@ projects). Subsequent queries hit the LRU cache.
 
 | Issue | Environment variable | Default |
 | ----- | -------------------- | ------- |
-| Queries timing out | `ROSLYN_NAV_TIMEOUT_SECONDS` | 30 |
-| Too many results | `ROSLYN_NAV_MAX_RESULTS` | 100 |
-| Cache misses | `ROSLYN_NAV_CACHE_SIZE` | 50 |
+| Queries timing out | `ROSLYN_LENS_TIMEOUT_SECONDS` | 30 |
+| Too many results | `ROSLYN_LENS_MAX_RESULTS` | 100 |
+| Cache misses | `ROSLYN_LENS_CACHE_SIZE` | 50 |
 
-For solutions with many projects, increase `ROSLYN_NAV_CACHE_SIZE` to reduce
+For solutions with many projects, increase `ROSLYN_LENS_CACHE_SIZE` to reduce
 recompilation.
 
 ## File watcher issues
@@ -118,4 +118,4 @@ to specific files/projects to reduce noise.
 ## Getting help
 
 - [GitHub Issues](https://github.com/jfmeyers/roslyn-lens/issues)
-- Check stderr logs: `ROSLYN_NAV_LOG_LEVEL=Debug roslyn-lens`
+- Check stderr logs: `ROSLYN_LENS_LOG_LEVEL=Debug roslyn-lens`

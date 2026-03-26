@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Analyzers;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
@@ -79,7 +78,7 @@ public static class ValidateGranitConventionsTool
             .ToDictionary(g => g.Key, g => g.Count());
 
         var result = new GranitConventionsResult(violations, violations.Count, byCategory);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static async Task AnalyzeCompilationAsync(

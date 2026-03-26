@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -23,7 +22,7 @@ public static class GetTestCoverageMapTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var testClassMap = await BuildTestClassMapAsync(workspace, solution, ct);
 
@@ -36,7 +35,7 @@ public static class GetTestCoverageMapTool
             workspace, productionProjects, testClassMap, maxResults, ct);
 
         var result = new TestCoverageMapResult(entries, entries.Count, covered, uncovered);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static async Task<Dictionary<string, (string? File, string Project)>> BuildTestClassMapAsync(

@@ -18,7 +18,7 @@ Resolve multiple symbol names at once.
 
 ### Example
 
-Input: `names = "WorkspaceManager, SymbolResolver, NavigatorConfig"`
+Input: `names = "WorkspaceManager, SymbolResolver, RoslynLensConfig"`
 
 ```json
 {
@@ -34,8 +34,8 @@ Input: `names = "WorkspaceManager, SymbolResolver, NavigatorConfig"`
       "Error": null
     },
     {
-      "Query": "NavigatorConfig",
-      "Result": { "Matches": [{ "Name": "RoslynLens.NavigatorConfig", "Kind": "class", "File": "NavigatorConfig.cs", "Line": 8 }], "Total": 1 },
+      "Query": "RoslynLensConfig",
+      "Result": { "Matches": [{ "Name": "RoslynLens.RoslynLensConfig", "Kind": "class", "File": "RoslynLensConfig.cs", "Line": 8 }], "Total": 1 },
       "Error": null
     }
   ],

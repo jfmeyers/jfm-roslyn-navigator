@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -41,6 +40,6 @@ public static class FindSymbolTool
         }).ToList();
 
         var result = new SymbolSearchResult(matches, matches.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

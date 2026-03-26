@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -55,6 +54,6 @@ public static class FindSymbolsBatchTool
             }
         }
 
-        return JsonSerializer.Serialize(new SymbolBatchResult(items, items.Count, succeeded, failed));
+        return Json.Serialize(new SymbolBatchResult(items, items.Count, succeeded, failed));
     }
 }

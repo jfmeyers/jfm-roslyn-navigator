@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -23,7 +22,7 @@ public static class FindCallersTool
 
         var symbol = await SymbolResolver.ResolveMethodByNameAsync(workspace, methodName, className, ct);
         if (symbol is null)
-            return JsonSerializer.Serialize(new CallersResult(methodName, [], 0));
+            return Json.Serialize(new CallersResult(methodName, [], 0));
 
         var solution = workspace.GetSolution()!;
         var callers = await SymbolFinder.FindCallersAsync(symbol, solution, ct);
@@ -41,6 +40,6 @@ public static class FindCallersTool
             .ToList();
 
         var result = new CallersResult(symbol.ToDisplayString(), callerInfos, callerInfos.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

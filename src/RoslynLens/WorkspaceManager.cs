@@ -12,7 +12,7 @@ public sealed class WorkspaceManager : IDisposable
 {
     private const int LazyLoadThreshold = 50;
 
-    private readonly NavigatorConfig _config;
+    private readonly RoslynLensConfig _config;
     private readonly SemaphoreSlim _writeLock = new(1, 1);
     private readonly ConcurrentDictionary<ProjectId, (Compilation Compilation, long AccessCount)> _compilationCache = new();
     private long _accessCounter;
@@ -23,9 +23,9 @@ public sealed class WorkspaceManager : IDisposable
     private FileSystemWatcher? _projectWatcher;
     private string? _solutionDirectory;
 
-    public NavigatorConfig Config => _config;
+    public RoslynLensConfig Config => _config;
 
-    public WorkspaceManager(NavigatorConfig config)
+    public WorkspaceManager(RoslynLensConfig config)
     {
         _config = config;
     }
@@ -71,7 +71,7 @@ public sealed class WorkspaceManager : IDisposable
             return null;
 
         var status = new { state = State.ToString(), message = ErrorMessage ?? "Workspace not ready", projectCount = ProjectCount };
-        return System.Text.Json.JsonSerializer.Serialize(status);
+        return Json.Serialize(status);
     }
 
     public Solution? GetSolution() => _solution;

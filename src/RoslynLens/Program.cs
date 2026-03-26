@@ -11,7 +11,7 @@ MSBuildLocator.RegisterDefaults();
 var solutionPath = SolutionDiscovery.FindSolutionPath(args);
 WorkspaceInitializer.SolutionPath = solutionPath;
 
-var config = NavigatorConfig.FromEnvironment();
+var config = RoslynLensConfig.FromEnvironment();
 
 var builder = Host.CreateApplicationBuilder(args);
 

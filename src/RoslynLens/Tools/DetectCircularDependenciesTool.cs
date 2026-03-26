@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -23,7 +22,7 @@ public static class DetectCircularDependenciesTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var cycles = scope.ToLowerInvariant() switch
         {
@@ -32,7 +31,7 @@ public static class DetectCircularDependenciesTool
         };
 
         var result = new CircularDependenciesResult(scope, cycles, cycles.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static List<CycleEntry> DetectProjectCycles(Solution solution, string? projectFilter)

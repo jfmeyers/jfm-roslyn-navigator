@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-03-26
+
+### Fixed
+
+- JSON responses no longer escape quotes as `\u0027` — use relaxed
+  encoding for human-readable MCP output
+- Environment variable prefix renamed from `ROSLYN_NAV_` to `ROSLYN_LENS_`
+
+### Changed
+
+- NuGet package size reduced from 13MB to 9.2MB by excluding Roslyn
+  localization satellites and legacy BuildHost-net472
+
 ## [1.1.0] - 2026-03-20
 
 ### Changed
@@ -28,8 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fuzzy FQN resolution with partial namespace matching and Levenshtein distance
 - Dead code analysis with granular filters (`includePublicMembers`,
   `includeEntryPoints`, `projectFilter`, `fileFilter`)
-- Environment variable configuration (`ROSLYN_NAV_TIMEOUT_SECONDS`,
-  `ROSLYN_NAV_MAX_RESULTS`, `ROSLYN_NAV_CACHE_SIZE`, `ROSLYN_NAV_LOG_LEVEL`)
+- Environment variable configuration (`ROSLYN_LENS_TIMEOUT_SECONDS`,
+  `ROSLYN_LENS_MAX_RESULTS`, `ROSLYN_LENS_CACHE_SIZE`, `ROSLYN_LENS_LOG_LEVEL`)
 - BFS solution auto-discovery (`.sln`/`.slnx`, max 3 levels)
 - LRU compilation cache (configurable, default 50 entries)
 - File watcher for incremental updates
@@ -67,6 +80,7 @@ Initial release as `JFM.RoslynNavigator`.
 - GitHub Actions CI/CD (build + release + NuGet publish)
 - Global dotnet tool distribution (`dotnet tool install --global JFM.RoslynNavigator`)
 
+[1.1.1]: https://github.com/jfmeyers/roslyn-lens/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jfmeyers/roslyn-lens/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/jfmeyers/roslyn-lens/compare/v0.1.1...v1.0.0
 [0.1.1]: https://github.com/jfmeyers/roslyn-lens/releases/tag/v0.1.1

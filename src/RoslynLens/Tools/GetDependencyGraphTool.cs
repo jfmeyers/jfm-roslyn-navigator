@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -29,13 +28,13 @@ public static class GetDependencyGraphTool
 
         var symbol = await SymbolResolver.ResolveSymbolAsync(workspace, symbolName, file, line, ct: ct);
         if (symbol is null)
-            return JsonSerializer.Serialize(new { error = $"Symbol '{symbolName}' not found" });
+            return Json.Serialize(new { error = $"Symbol '{symbolName}' not found" });
 
         var visited = new HashSet<string>();
         var rootNode = await BuildGraphAsync(workspace, symbol, depth, visited, ct);
 
         var result = new DependencyGraphResult(rootNode, depth);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     internal static async Task<DependencyNode> BuildGraphAsync(

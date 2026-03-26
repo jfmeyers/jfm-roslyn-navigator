@@ -4,14 +4,14 @@ RoslynLens is configured via environment variables and CLI arguments.
 
 ## Environment variables
 
-All environment variables use the `ROSLYN_NAV_` prefix.
+All environment variables use the `ROSLYN_LENS_` prefix.
 
 | Variable | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
-| `ROSLYN_NAV_TIMEOUT_SECONDS` | int | 30 | Maximum time (seconds) for any Roslyn operation before timeout |
-| `ROSLYN_NAV_MAX_RESULTS` | int | 100 | Maximum number of results returned per query |
-| `ROSLYN_NAV_CACHE_SIZE` | int | 50 | Number of project compilations kept in the LRU cache |
-| `ROSLYN_NAV_LOG_LEVEL` | string | Information | Log verbosity: `Trace`, `Debug`, `Information`, `Warning`, `Error` |
+| `ROSLYN_LENS_TIMEOUT_SECONDS` | int | 30 | Maximum time (seconds) for any Roslyn operation before timeout |
+| `ROSLYN_LENS_MAX_RESULTS` | int | 100 | Maximum number of results returned per query |
+| `ROSLYN_LENS_CACHE_SIZE` | int | 50 | Number of project compilations kept in the LRU cache |
+| `ROSLYN_LENS_LOG_LEVEL` | string | Information | Log verbosity: `Trace`, `Debug`, `Information`, `Warning`, `Error` |
 
 ### Setting env vars in `.mcp.json`
 
@@ -23,9 +23,9 @@ All environment variables use the `ROSLYN_NAV_` prefix.
       "command": "roslyn-lens",
       "args": [],
       "env": {
-        "ROSLYN_NAV_TIMEOUT_SECONDS": "60",
-        "ROSLYN_NAV_CACHE_SIZE": "100",
-        "ROSLYN_NAV_LOG_LEVEL": "Debug"
+        "ROSLYN_LENS_TIMEOUT_SECONDS": "60",
+        "ROSLYN_LENS_CACHE_SIZE": "100",
+        "ROSLYN_LENS_LOG_LEVEL": "Debug"
       }
     }
   }
@@ -36,8 +36,8 @@ All environment variables use the `ROSLYN_NAV_` prefix.
 
 ```bash
 claude mcp add --scope user --transport stdio \
-  -e ROSLYN_NAV_TIMEOUT_SECONDS=60 \
-  -e ROSLYN_NAV_CACHE_SIZE=100 \
+  -e ROSLYN_LENS_TIMEOUT_SECONDS=60 \
+  -e ROSLYN_LENS_CACHE_SIZE=100 \
   roslyn-lens -- roslyn-lens
 ```
 
@@ -68,8 +68,8 @@ Defaults are fine. Compilations are lazy-loaded on first access.
 ### Large solutions (50+ projects)
 
 ```bash
-ROSLYN_NAV_CACHE_SIZE=100
-ROSLYN_NAV_TIMEOUT_SECONDS=60
+ROSLYN_LENS_CACHE_SIZE=100
+ROSLYN_LENS_TIMEOUT_SECONDS=60
 ```
 
 Increase cache size to avoid recompilation churn. Increase timeout for initial
@@ -89,7 +89,7 @@ All logs go to **stderr** (stdout is reserved for MCP JSON-RPC).
 
 ```bash
 # Debug logging to a file
-ROSLYN_NAV_LOG_LEVEL=Debug roslyn-lens 2>/tmp/roslyn-lens.log
+ROSLYN_LENS_LOG_LEVEL=Debug roslyn-lens 2>/tmp/roslyn-lens.log
 ```
 
 Log levels:

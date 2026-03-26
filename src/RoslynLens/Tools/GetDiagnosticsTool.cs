@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -23,7 +22,7 @@ public static class GetDiagnosticsTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var minSeverity = ParseSeverity(severityFilter);
 
@@ -40,7 +39,7 @@ public static class GetDiagnosticsTool
         DiagnosticSeverity minSeverity, CancellationToken ct)
     {
         if (path is null)
-            return JsonSerializer.Serialize(new { error = "Path is required for file scope" });
+            return Json.Serialize(new { error = "Path is required for file scope" });
 
         var diagnostics = new List<DiagnosticInfo>();
         var normalizedPath = path.Replace('\\', '/');
@@ -71,14 +70,14 @@ public static class GetDiagnosticsTool
         DiagnosticSeverity minSeverity, CancellationToken ct)
     {
         if (path is null)
-            return JsonSerializer.Serialize(new { error = "Path is required for project scope" });
+            return Json.Serialize(new { error = "Path is required for project scope" });
 
         var project = solution.Projects
             .FirstOrDefault(p => p.Name.Equals(path, StringComparison.OrdinalIgnoreCase)
                 || (p.FilePath?.Replace('\\', '/').EndsWith(path.Replace('\\', '/'), StringComparison.OrdinalIgnoreCase) == true));
 
         if (project is null)
-            return JsonSerializer.Serialize(new { error = $"Project '{path}' not found" });
+            return Json.Serialize(new { error = $"Project '{path}' not found" });
 
         var diagnostics = new List<DiagnosticInfo>();
         var compilation = await workspace.GetCompilationAsync(project, ct);
@@ -108,7 +107,7 @@ public static class GetDiagnosticsTool
     private static string SerializeResult(List<DiagnosticInfo> diagnostics, string scope)
     {
         var result = new DiagnosticsResult(diagnostics, diagnostics.Count, scope);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static void CollectDiagnostics(

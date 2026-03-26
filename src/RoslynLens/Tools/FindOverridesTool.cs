@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -23,7 +22,7 @@ public static class FindOverridesTool
 
         var symbol = await SymbolResolver.ResolveMethodByNameAsync(workspace, methodName, className, ct);
         if (symbol is null)
-            return JsonSerializer.Serialize(new OverridesResult(methodName, [], 0));
+            return Json.Serialize(new OverridesResult(methodName, [], 0));
 
         var solution = workspace.GetSolution()!;
         var overrides = await SymbolFinder.FindOverridesAsync(symbol, solution, cancellationToken: ct);
@@ -37,6 +36,6 @@ public static class FindOverridesTool
         }).ToList();
 
         var result = new OverridesResult(symbol.ToDisplayString(), overrideInfos, overrideInfos.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -48,7 +47,7 @@ public static class GetSymbolDetailBatchTool
             }
         }
 
-        return JsonSerializer.Serialize(new DetailBatchResult(items, items.Count, succeeded, failed));
+        return Json.Serialize(new DetailBatchResult(items, items.Count, succeeded, failed));
     }
 
     private static SymbolDetail BuildSymbolDetail(ISymbol symbol, CancellationToken ct)

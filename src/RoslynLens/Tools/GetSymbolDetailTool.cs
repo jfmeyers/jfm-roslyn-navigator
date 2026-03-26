@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -30,7 +29,7 @@ public static class GetSymbolDetailTool
         }
 
         if (candidates.Count == 0)
-            return JsonSerializer.Serialize(new { error = $"Symbol '{symbolName}' not found" });
+            return Json.Serialize(new { error = $"Symbol '{symbolName}' not found" });
 
         var symbol = candidates[0];
         var location = SymbolResolver.GetLocation(symbol);
@@ -66,6 +65,6 @@ public static class GetSymbolDetailTool
             parameters,
             xmlDoc);
 
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

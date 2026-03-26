@@ -57,6 +57,14 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      - name: Check vulnerable packages
+        run: |
+          dotnet list package --vulnerable --include-transitive 2>&1 | tee /tmp/audit.log
+          if grep -q 'has the following vulnerable packages' /tmp/audit.log; then
+            echo "::error::Vulnerable NuGet packages detected"
+            exit 1
+          fi
+
       - name: Build
         run: dotnet build --no-restore -c Release
 

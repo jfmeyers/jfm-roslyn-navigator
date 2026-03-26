@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -23,14 +22,14 @@ public static class AnalyzeControlFlowTool
 
         var (model, body, _) = await SymbolResolver.ResolveMethodBodyAsync(workspace, methodName, className, ct);
         if (model is null || body is null)
-            return JsonSerializer.Serialize(new { error = $"Method '{methodName}' not found or has no body" });
+            return Json.Serialize(new { error = $"Method '{methodName}' not found or has no body" });
 
         if (body is not BlockSyntax block || block.Statements.Count == 0)
-            return JsonSerializer.Serialize(new { error = "Control flow analysis requires a block body with statements" });
+            return Json.Serialize(new { error = "Control flow analysis requires a block body with statements" });
 
         var analysis = model.AnalyzeControlFlow(block.Statements.First(), block.Statements.Last());
         if (analysis is null || !analysis.Succeeded)
-            return JsonSerializer.Serialize(new { error = "Control flow analysis failed" });
+            return Json.Serialize(new { error = "Control flow analysis failed" });
 
         var result = new ControlFlowResult(
             methodName,
@@ -39,6 +38,6 @@ public static class AnalyzeControlFlowTool
             analysis.ReturnStatements.Length,
             analysis.ExitPoints.Length);
 
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

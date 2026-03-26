@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -72,6 +71,6 @@ public static class GetPublicApiBatchTool
             }
         }
 
-        return JsonSerializer.Serialize(new ApiBatchResult(items, items.Count, succeeded, failed));
+        return Json.Serialize(new ApiBatchResult(items, items.Count, succeeded, failed));
     }
 }

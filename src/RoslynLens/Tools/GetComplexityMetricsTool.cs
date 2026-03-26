@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -37,14 +36,14 @@ public static class GetComplexityMetricsTool
     {
         var (_, body, methodSyntax) = await SymbolResolver.ResolveMethodBodyAsync(workspace, name, className, ct);
         if (body is null || methodSyntax is null)
-            return JsonSerializer.Serialize(new { error = $"Method '{name}' not found or has no body" });
+            return Json.Serialize(new { error = $"Method '{name}' not found or has no body" });
 
         var metrics = ComplexityAnalyzer.Analyze(body);
         var location = SymbolResolver.GetLocation(
             (await SymbolResolver.ResolveMethodByNameAsync(workspace, name, className, ct))!);
 
         var entry = new MethodComplexity(name, className, location.FilePath, location.Line, metrics);
-        return JsonSerializer.Serialize(new ComplexityResult([entry], 1));
+        return Json.Serialize(new ComplexityResult([entry], 1));
     }
 
     private static async Task<string> AnalyzeTypeAsync(
@@ -52,7 +51,7 @@ public static class GetComplexityMetricsTool
     {
         var symbol = await SymbolResolver.ResolveSymbolAsync(workspace, typeName, ct: ct);
         if (symbol is not INamedTypeSymbol typeSymbol)
-            return JsonSerializer.Serialize(new { error = $"Type '{typeName}' not found" });
+            return Json.Serialize(new { error = $"Type '{typeName}' not found" });
 
         var methods = new List<MethodComplexity>();
 
@@ -81,7 +80,7 @@ public static class GetComplexityMetricsTool
         }
 
         var sorted = methods.OrderByDescending(m => m.Metrics.Cyclomatic).ToList();
-        return JsonSerializer.Serialize(new ComplexityResult(sorted, sorted.Count));
+        return Json.Serialize(new ComplexityResult(sorted, sorted.Count));
     }
 
     private static async Task<string> AnalyzeProjectAsync(
@@ -89,16 +88,16 @@ public static class GetComplexityMetricsTool
     {
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var project = solution.Projects
             .FirstOrDefault(p => p.Name.Equals(projectName, StringComparison.OrdinalIgnoreCase));
         if (project is null)
-            return JsonSerializer.Serialize(new { error = $"Project '{projectName}' not found" });
+            return Json.Serialize(new { error = $"Project '{projectName}' not found" });
 
         var compilation = await workspace.GetCompilationAsync(project, ct);
         if (compilation is null)
-            return JsonSerializer.Serialize(new { error = $"Could not compile project '{projectName}'" });
+            return Json.Serialize(new { error = $"Could not compile project '{projectName}'" });
 
         var methods = new List<MethodComplexity>();
 
@@ -111,7 +110,7 @@ public static class GetComplexityMetricsTool
         }
 
         var sorted = methods.OrderByDescending(m => m.Metrics.Cyclomatic).ToList();
-        return JsonSerializer.Serialize(new ComplexityResult(sorted, sorted.Count));
+        return Json.Serialize(new ComplexityResult(sorted, sorted.Count));
     }
 
     private static async Task CollectMethodMetricsAsync(

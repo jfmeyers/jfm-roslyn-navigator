@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -22,7 +21,7 @@ public static class GetPublicApiTool
         var symbol = await SymbolResolver.ResolveSymbolAsync(workspace, typeName, ct: ct);
 
         if (symbol is not INamedTypeSymbol typeSymbol)
-            return JsonSerializer.Serialize(new PublicApiResult(typeName, [], 0));
+            return Json.Serialize(new PublicApiResult(typeName, [], 0));
 
         var members = typeSymbol.GetMembers()
             .Where(m => m.DeclaredAccessibility == Accessibility.Public)
@@ -54,6 +53,6 @@ public static class GetPublicApiTool
             .ToList();
 
         var result = new PublicApiResult(typeSymbol.ToDisplayString(), members, members.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

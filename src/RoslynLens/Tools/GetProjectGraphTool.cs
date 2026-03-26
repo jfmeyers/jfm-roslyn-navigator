@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
 using RoslynLens.Responses;
@@ -24,32 +23,57 @@ public static class GetProjectGraphTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return Task.FromResult(JsonSerializer.Serialize(new { error = "No solution loaded" }));
-
-        var filters = projectFilter?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            return Task.FromResult(Json.Serialize(new { error = "No solution loaded" }));
 
         var allProjects = solution.Projects.ToList();
-        var matchingNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var matchingNames = BuildMatchSet(projectFilter, allProjects, includeTransitive, solution);
 
-        if (filters is not null)
+        var nodes = BuildNodes(allProjects, matchingNames, solution, maxResults, ct);
+
+        var totalMatching = matchingNames is not null ? matchingNames.Count : allProjects.Count;
+        var result = new ProjectGraphResult(nodes, totalMatching);
+        return Task.FromResult(Json.Serialize(result));
+    }
+
+    private static HashSet<string>? BuildMatchSet(
+        string? projectFilter,
+        List<Project> allProjects,
+        bool includeTransitive,
+        Solution solution)
+    {
+        var filters = projectFilter?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (filters is null)
+            return null;
+
+        var names = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var name in allProjects
+            .Where(p => filters.Any(f => p.Name.Contains(f, StringComparison.OrdinalIgnoreCase)))
+            .Select(p => p.Name))
         {
-            foreach (var project in allProjects)
-            {
-                if (filters.Any(f => project.Name.Contains(f, StringComparison.OrdinalIgnoreCase)))
-                    matchingNames.Add(project.Name);
-            }
-
-            if (includeTransitive)
-                ExpandTransitiveDependencies(solution, allProjects, matchingNames);
+            names.Add(name);
         }
 
+        if (includeTransitive)
+            ExpandTransitiveDependencies(solution, allProjects, names);
+
+        return names;
+    }
+
+    private static List<ProjectNode> BuildNodes(
+        List<Project> allProjects,
+        HashSet<string>? matchingNames,
+        Solution solution,
+        int maxResults,
+        CancellationToken ct)
+    {
         var nodes = new List<ProjectNode>();
 
         foreach (var project in allProjects)
         {
             ct.ThrowIfCancellationRequested();
 
-            if (filters is not null && !matchingNames.Contains(project.Name))
+            if (matchingNames is not null && !matchingNames.Contains(project.Name))
                 continue;
 
             var references = project.ProjectReferences
@@ -58,17 +82,13 @@ public static class GetProjectGraphTool
                 .Cast<string>()
                 .ToList();
 
-            var framework = ReadTargetFramework(project.FilePath);
-
-            nodes.Add(new ProjectNode(project.Name, framework, references));
+            nodes.Add(new ProjectNode(project.Name, ReadTargetFramework(project.FilePath), references));
 
             if (nodes.Count >= maxResults)
                 break;
         }
 
-        var totalMatching = filters is not null ? matchingNames.Count : allProjects.Count;
-        var result = new ProjectGraphResult(nodes, totalMatching);
-        return Task.FromResult(JsonSerializer.Serialize(result));
+        return nodes;
     }
 
     private static void ExpandTransitiveDependencies(

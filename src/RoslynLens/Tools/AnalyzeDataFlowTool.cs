@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,7 +23,7 @@ public static class AnalyzeDataFlowTool
 
         var (model, body, _) = await SymbolResolver.ResolveMethodBodyAsync(workspace, methodName, className, ct);
         if (model is null || body is null)
-            return JsonSerializer.Serialize(new { error = $"Method '{methodName}' not found or has no body" });
+            return Json.Serialize(new { error = $"Method '{methodName}' not found or has no body" });
 
         DataFlowAnalysis? analysis = null;
 
@@ -38,7 +37,7 @@ public static class AnalyzeDataFlowTool
         }
 
         if (analysis is null || !analysis.Succeeded)
-            return JsonSerializer.Serialize(new { error = "Data flow analysis failed" });
+            return Json.Serialize(new { error = "Data flow analysis failed" });
 
         var result = new DataFlowResult(
             methodName,
@@ -50,6 +49,6 @@ public static class AnalyzeDataFlowTool
             analysis.AlwaysAssigned.Select(s => s.Name).ToList(),
             analysis.Captured.Select(s => s.Name).ToList());
 
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

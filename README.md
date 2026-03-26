@@ -158,10 +158,10 @@ Environment variables for runtime tuning:
 
 | Variable | Purpose | Default |
 | -------- | ------- | ------- |
-| `ROSLYN_NAV_TIMEOUT_SECONDS` | Operation timeout | 30 |
-| `ROSLYN_NAV_MAX_RESULTS` | Maximum results per query | 100 |
-| `ROSLYN_NAV_CACHE_SIZE` | LRU compilation cache size | 50 |
-| `ROSLYN_NAV_LOG_LEVEL` | Log verbosity (Trace/Debug/Information/Warning/Error) | Information |
+| `ROSLYN_LENS_TIMEOUT_SECONDS` | Operation timeout | 30 |
+| `ROSLYN_LENS_MAX_RESULTS` | Maximum results per query | 100 |
+| `ROSLYN_LENS_CACHE_SIZE` | LRU compilation cache size | 50 |
+| `ROSLYN_LENS_LOG_LEVEL` | Log verbosity (Trace/Debug/Information/Warning/Error) | Information |
 
 ## Architecture
 
@@ -172,7 +172,7 @@ src/RoslynLens/
 ├── WorkspaceManager.cs         # MSBuildWorkspace, LRU compilation cache
 ├── WorkspaceInitializer.cs     # Background solution loading
 ├── SymbolResolver.cs           # Cross-project symbol resolution + fuzzy FQN
-├── NavigatorConfig.cs          # Environment variable configuration
+├── RoslynLensConfig.cs          # Environment variable configuration
 ├── WorkspaceState.cs           # Workspace loading state enum
 ├── ComplexityAnalyzer.cs       # Cyclomatic/cognitive complexity metrics
 ├── DuplicateCodeDetector.cs    # AST fingerprinting for duplicate detection

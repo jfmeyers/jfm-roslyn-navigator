@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using ModelContextProtocol.Server;
@@ -33,7 +32,7 @@ public static class ResolveExternalSourceTool
         symbol ??= candidates.Count > 0 ? candidates[0] : null;
 
         if (symbol is null)
-            return JsonSerializer.Serialize(new { error = $"Symbol '{symbolName}' not found" });
+            return Json.Serialize(new { error = $"Symbol '{symbolName}' not found" });
 
         var (source, method) = await ExternalSourceResolver.ResolveAsync(symbol, ct);
 
@@ -52,6 +51,6 @@ public static class ResolveExternalSourceTool
             decompiledSource,
             method);
 
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

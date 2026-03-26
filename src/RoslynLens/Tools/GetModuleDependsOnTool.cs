@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -36,7 +35,7 @@ public static class GetModuleDependsOnTool
                 new ModuleDependency(moduleName, "unknown", null, null, null),
                 0,
                 direction);
-            return JsonSerializer.Serialize(empty);
+            return Json.Serialize(empty);
         }
 
         ModuleDependency rootDep;
@@ -55,7 +54,7 @@ public static class GetModuleDependsOnTool
         }
 
         var result = new ModuleDependsOnResult(rootDep, totalModules, direction);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static async Task<Dictionary<string, ModuleInfo>> BuildModuleMapAsync(

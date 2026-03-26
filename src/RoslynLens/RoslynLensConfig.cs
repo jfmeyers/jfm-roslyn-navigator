@@ -5,22 +5,22 @@ namespace RoslynLens;
 /// <summary>
 /// Runtime configuration read from environment variables.
 /// </summary>
-public sealed record NavigatorConfig(
+public sealed record RoslynLensConfig(
     int TimeoutSeconds,
     int MaxResults,
     int CacheSize,
     LogLevel LogLevel)
 {
-    private const string Prefix = "ROSLYN_NAV_";
+    private const string Prefix = "ROSLYN_LENS_";
 
-    public static NavigatorConfig FromEnvironment()
+    public static RoslynLensConfig FromEnvironment()
     {
         var timeout = ReadInt($"{Prefix}TIMEOUT_SECONDS", 30);
         var maxResults = ReadInt($"{Prefix}MAX_RESULTS", 100);
         var cacheSize = ReadInt($"{Prefix}CACHE_SIZE", 50);
         var logLevel = ReadLogLevel($"{Prefix}LOG_LEVEL", LogLevel.Information);
 
-        return new NavigatorConfig(timeout, maxResults, cacheSize, logLevel);
+        return new RoslynLensConfig(timeout, maxResults, cacheSize, logLevel);
     }
 
     private static int ReadInt(string name, int defaultValue)

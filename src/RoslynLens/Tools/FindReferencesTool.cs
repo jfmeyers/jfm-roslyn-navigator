@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -25,7 +24,7 @@ public static class FindReferencesTool
 
         var symbol = await SymbolResolver.ResolveSymbolAsync(workspace, symbolName, file, line, ct: ct);
         if (symbol is null)
-            return JsonSerializer.Serialize(new ReferencesResult(symbolName, [], 0));
+            return Json.Serialize(new ReferencesResult(symbolName, [], 0));
 
         var referencedSymbols = await SymbolResolver.FindReferencesAsync(workspace, symbol, ct);
 
@@ -47,7 +46,7 @@ public static class FindReferencesTool
         }
 
         var result = new ReferencesResult(symbol.ToDisplayString(), locations, locations.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static async Task<string?> ClassifyReferenceKindAsync(

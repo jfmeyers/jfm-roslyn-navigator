@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Analyzers;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
@@ -26,11 +25,11 @@ public static class DetectAntiPatternsTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var detectorList = detectors.ToList();
         if (detectorList.Count == 0)
-            return JsonSerializer.Serialize(new AntiPatternsResult([], 0));
+            return Json.Serialize(new AntiPatternsResult([], 0));
 
         var violations = new List<AntiPatternEntry>();
 
@@ -49,7 +48,7 @@ public static class DetectAntiPatternsTool
         }
 
         var result = new AntiPatternsResult(violations, violations.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     internal static void AnalyzeCompilation(

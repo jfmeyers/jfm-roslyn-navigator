@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Analyzers;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
@@ -24,7 +23,7 @@ public static class GetFileOverviewTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var normalizedPath = filePath.Replace('\\', '/');
 
@@ -38,16 +37,16 @@ public static class GetFileOverviewTool
         }
 
         if (document is null)
-            return JsonSerializer.Serialize(new { error = $"File '{filePath}' not found in solution" });
+            return Json.Serialize(new { error = $"File '{filePath}' not found in solution" });
 
         var project2 = document.Project;
         var compilation = await workspace.GetCompilationAsync(project2, ct);
         if (compilation is null)
-            return JsonSerializer.Serialize(new { error = "Could not compile project" });
+            return Json.Serialize(new { error = "Could not compile project" });
 
         var tree = await document.GetSyntaxTreeAsync(ct);
         if (tree is null)
-            return JsonSerializer.Serialize(new { error = "Could not get syntax tree" });
+            return Json.Serialize(new { error = "Could not get syntax tree" });
 
         var root = await tree.GetRootAsync(ct);
 
@@ -89,6 +88,6 @@ public static class GetFileOverviewTool
         var antiPatterns = new AntiPatternsResult(violations, violations.Count);
 
         var result = new FileOverview(document.FilePath ?? filePath, types, diagnostics, antiPatterns);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

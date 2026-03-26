@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -26,7 +25,7 @@ public static class GetTypeHierarchyTool
         {
             var empty = new TypeHierarchyResult(
                 new TypeHierarchyNode(typeName, "unknown", null, null), [], [], []);
-            return JsonSerializer.Serialize(empty);
+            return Json.Serialize(empty);
         }
 
         var (file, line) = SymbolResolver.GetLocation(typeSymbol);
@@ -71,6 +70,6 @@ public static class GetTypeHierarchyTool
         }).ToList();
 
         var result = new TypeHierarchyResult(typeNode, baseTypes, interfaces, derivedTypes);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 }

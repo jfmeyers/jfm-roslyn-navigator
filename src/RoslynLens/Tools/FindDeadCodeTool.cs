@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Text.Json;
 using RoslynLens.Responses;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -52,11 +51,11 @@ public static class FindDeadCodeTool
 
         var solution = workspace.GetSolution();
         if (solution is null)
-            return JsonSerializer.Serialize(new { error = "No solution loaded" });
+            return Json.Serialize(new { error = "No solution loaded" });
 
         var projects = GetProjectsInScope(solution, scope, path);
         if (projects.Count == 0)
-            return JsonSerializer.Serialize(new { error = $"No projects found for scope '{scope}' with path '{path}'" });
+            return Json.Serialize(new { error = $"No projects found for scope '{scope}' with path '{path}'" });
 
         if (projectFilter is not null)
         {
@@ -79,7 +78,7 @@ public static class FindDeadCodeTool
         }
 
         var result = new DeadCodeResult(entries, entries.Count);
-        return JsonSerializer.Serialize(result);
+        return Json.Serialize(result);
     }
 
     private static async Task AnalyzeProjectForDeadCodeAsync(
