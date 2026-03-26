@@ -4,7 +4,7 @@ This file lists the third-party libraries used by the **RoslynLens**
 project along with their respective licenses. It is updated whenever an
 external dependency is added or modified.
 
-Last updated: 2026-03-19
+Last updated: 2026-03-26
 
 ---
 
@@ -12,7 +12,7 @@ Last updated: 2026-03-19
 
 | License | Package count |
 | ------- | ------------- |
-| MIT | 5 |
+| MIT | 6 |
 | Apache-2.0 | 1 |
 
 ---
@@ -23,10 +23,11 @@ Last updated: 2026-03-19
 
 | Package | Version | Copyright |
 | ------- | ------- | --------- |
-| Microsoft.Build.Locator | 1.7.8 | © Microsoft Corporation |
-| Microsoft.CodeAnalysis.CSharp.Workspaces | 5.0.0 | © Microsoft Corporation |
-| Microsoft.CodeAnalysis.Workspaces.MSBuild | 5.0.0 | © Microsoft Corporation |
-| Microsoft.Extensions.Hosting | 10.0.0 | © Microsoft Corporation |
+| Microsoft.Build.Locator | 1.11.2 | © Microsoft Corporation |
+| Microsoft.Build.Framework | 17.11.48 | © Microsoft Corporation |
+| Microsoft.CodeAnalysis.CSharp.Workspaces | 5.3.0 | © Microsoft Corporation |
+| Microsoft.CodeAnalysis.Workspaces.MSBuild | 5.3.0 | © Microsoft Corporation |
+| Microsoft.Extensions.Hosting | 10.0.5 | © Microsoft Corporation |
 | ICSharpCode.Decompiler | 9.1.0.7988 | © Daniel Grunwald and contributors |
 
 ### Apache-2.0

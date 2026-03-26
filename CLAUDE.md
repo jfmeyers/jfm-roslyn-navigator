@@ -60,9 +60,13 @@ dotnet tool install --global --add-source ./nupkgs RoslynLens
 ## Release
 
 ```bash
-# 1. Update <Version> in RoslynLens.csproj
-# 2. Commit and push
-# 3. Tag and push — triggers CI + NuGet publish + GitHub Release
+# 1. Check for outdated/vulnerable packages
+dotnet list package --outdated
+dotnet list package --vulnerable --include-transitive
+# 2. Update <Version> in RoslynLens.csproj
+# 3. Update THIRD-PARTY-NOTICES.md if dependencies changed
+# 4. Commit and push
+# 5. Tag and push — triggers CI + NuGet publish + GitHub Release
 git tag v1.2.0
 git push origin v1.2.0
 ```
