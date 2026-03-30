@@ -60,7 +60,7 @@ projects). Subsequent queries hit the LRU cache.
 | ----- | -------------------- | ------- |
 | Queries timing out | `ROSLYN_LENS_TIMEOUT_SECONDS` | 30 |
 | Too many results | `ROSLYN_LENS_MAX_RESULTS` | 100 |
-| Cache misses | `ROSLYN_LENS_CACHE_SIZE` | 50 |
+| Cache misses | `ROSLYN_LENS_CACHE_SIZE` | 20 |
 
 For solutions with many projects, increase `ROSLYN_LENS_CACHE_SIZE` to reduce
 recompilation.

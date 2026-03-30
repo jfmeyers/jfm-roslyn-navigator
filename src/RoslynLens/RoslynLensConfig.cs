@@ -17,7 +17,7 @@ public sealed record RoslynLensConfig(
     {
         var timeout = ReadInt($"{Prefix}TIMEOUT_SECONDS", 30);
         var maxResults = ReadInt($"{Prefix}MAX_RESULTS", 100);
-        var cacheSize = ReadInt($"{Prefix}CACHE_SIZE", 50);
+        var cacheSize = ReadInt($"{Prefix}CACHE_SIZE", 20);
         var logLevel = ReadLogLevel($"{Prefix}LOG_LEVEL", LogLevel.Information);
 
         return new RoslynLensConfig(timeout, maxResults, cacheSize, logLevel);

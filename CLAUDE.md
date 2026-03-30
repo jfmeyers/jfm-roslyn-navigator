@@ -10,7 +10,7 @@
 
 ## Stack
 
-.NET 10 | C# 14 | Roslyn 5.0 | ModelContextProtocol 1.1.0 | xUnit v3
+.NET 10 | C# 14 | Roslyn 5.3 | ModelContextProtocol 1.1.0 | xUnit v3
 
 ## Commands
 
@@ -27,11 +27,11 @@ dotnet tool install --global --add-source ./nupkgs RoslynLens
 | ---- | ---- |
 | `Program.cs` | Host + MCP stdio transport (logs → stderr) |
 | `SolutionDiscovery.cs` | BFS `.sln`/`.slnx` auto-discovery (max 3 levels) |
-| `WorkspaceManager.cs` | MSBuildWorkspace, LRU compilation cache (50) |
+| `WorkspaceManager.cs` | MSBuildWorkspace, LRU cache (50), wait-for-ready |
 | `WorkspaceInitializer.cs` | BackgroundService for async solution loading |
 | `SymbolResolver.cs` | Cross-project symbol resolution with file/line disambiguation |
 | `Tools/` | 28 MCP tool implementations (one class per tool) |
-| `Analyzers/` | 19 anti-pattern detectors (one class per detector) |
+| `Analyzers/` | 18 detectors + 2 base classes (`InvocationDetectorBase`, `ObjectCreationDetectorBase`) |
 | `Responses/` | Token-optimized DTOs (records) |
 
 ## Conventions
@@ -45,17 +45,20 @@ dotnet tool install --global --add-source ./nupkgs RoslynLens
 
 ## Adding a new detector
 
-1. Create `src/.../Analyzers/MyDetector.cs` implementing `IAntiPatternDetector`
+1. Create `src/.../Analyzers/MyDetector.cs`:
+   - Simple invocation match (`Foo.Bar()`) → extend `InvocationDetectorBase`
+   - Simple creation match (`new Foo()`) → extend `ObjectCreationDetectorBase`
+   - Complex logic → implement `IAntiPatternDetector` directly
 2. Create `tests/.../Analyzers/MyDetectorTests.cs`
-3. Use `CSharpSyntaxTree.ParseText(source)` in tests — no full compilation needed for syntax detectors
-4. Use `TestContext.Current.CancellationToken` (not `CancellationToken.None`) — xUnit v3 enforces this
+3. Use `CSharpSyntaxTree.ParseText(source)` in tests — no full compilation needed
+4. Use `TestContext.Current.CancellationToken` (not `CancellationToken.None`)
 
 ## Adding a new tool
 
 1. Create `src/.../Tools/MyTool.cs` with `[McpServerToolType]` attribute
 2. Tools are auto-discovered via `WithToolsFromAssembly()`
 3. Inject `WorkspaceManager` to access the solution/compilations
-4. Check `WorkspaceManager.State` — return a "loading" message if not `Ready`
+4. Call `workspace.EnsureReadyOrStatus(ct)` — waits for ready (up to timeout), returns status JSON if not
 
 ## Release
 

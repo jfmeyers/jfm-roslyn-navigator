@@ -17,7 +17,7 @@ public class RoslynLensConfigTests
 
         config.TimeoutSeconds.ShouldBe(30);
         config.MaxResults.ShouldBe(100);
-        config.CacheSize.ShouldBe(50);
+        config.CacheSize.ShouldBe(20);
         config.LogLevel.ShouldBe(LogLevel.Information);
     }
 

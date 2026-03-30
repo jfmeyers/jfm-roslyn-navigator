@@ -10,7 +10,7 @@ All environment variables use the `ROSLYN_LENS_` prefix.
 | -------- | ---- | ------- | ----------- |
 | `ROSLYN_LENS_TIMEOUT_SECONDS` | int | 30 | Maximum time (seconds) for any Roslyn operation before timeout |
 | `ROSLYN_LENS_MAX_RESULTS` | int | 100 | Maximum number of results returned per query |
-| `ROSLYN_LENS_CACHE_SIZE` | int | 50 | Number of project compilations kept in the LRU cache |
+| `ROSLYN_LENS_CACHE_SIZE` | int | 20 | Number of project compilations kept in the LRU cache |
 | `ROSLYN_LENS_LOG_LEVEL` | string | Information | Log verbosity: `Trace`, `Debug`, `Information`, `Warning`, `Error` |
 
 ### Setting env vars in `.mcp.json`

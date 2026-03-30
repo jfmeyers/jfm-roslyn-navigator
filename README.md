@@ -160,7 +160,7 @@ Environment variables for runtime tuning:
 | -------- | ------- | ------- |
 | `ROSLYN_LENS_TIMEOUT_SECONDS` | Operation timeout | 30 |
 | `ROSLYN_LENS_MAX_RESULTS` | Maximum results per query | 100 |
-| `ROSLYN_LENS_CACHE_SIZE` | LRU compilation cache size | 50 |
+| `ROSLYN_LENS_CACHE_SIZE` | LRU compilation cache size | 20 |
 | `ROSLYN_LENS_LOG_LEVEL` | Log verbosity (Trace/Debug/Information/Warning/Error) | Information |
 
 ## Architecture

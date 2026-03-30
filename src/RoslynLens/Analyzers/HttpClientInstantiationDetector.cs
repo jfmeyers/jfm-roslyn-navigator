@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RoslynLens.Analyzers;
@@ -8,52 +7,34 @@ namespace RoslynLens.Analyzers;
 /// AP003: Detects direct instantiation of HttpClient via new HttpClient().
 /// HttpClient should be managed by IHttpClientFactory to avoid socket exhaustion.
 /// </summary>
-public sealed class HttpClientInstantiationDetector : IAntiPatternDetector
+public sealed class HttpClientInstantiationDetector : ObjectCreationDetectorBase
 {
-    public bool RequiresSemanticModel => false;
+    protected override IReadOnlyList<string> TargetTypeNames { get; } =
+        ["HttpClient", "System.Net.Http.HttpClient"];
 
-    public IEnumerable<AntiPatternViolation> Detect(SyntaxTree tree, SemanticModel? model, CancellationToken ct)
+    protected override string Id => "AP003";
+    protected override string Message => "Direct HttpClient instantiation — causes socket exhaustion under load";
+    protected override string Suggestion => "Use IHttpClientFactory instead";
+
+    public override IEnumerable<AntiPatternViolation> Detect(SyntaxTree tree, SemanticModel? model, CancellationToken ct)
     {
+        foreach (var violation in base.Detect(tree, model, ct))
+            yield return violation;
+
+        // Also check implicit new: HttpClient client = new(...)
         var root = tree.GetRoot(ct);
         var filePath = tree.FilePath;
 
-        foreach (var creation in root.DescendantNodes().OfType<ObjectCreationExpressionSyntax>())
-        {
-            ct.ThrowIfCancellationRequested();
-
-            var typeName = creation.Type.ToString();
-            if (typeName is "HttpClient" or "System.Net.Http.HttpClient")
-            {
-                var line = creation.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-                yield return new AntiPatternViolation(
-                    "AP003",
-                    AntiPatternSeverity.Warning,
-                    "Direct HttpClient instantiation — causes socket exhaustion under load",
-                    filePath,
-                    line,
-                    "Use IHttpClientFactory instead");
-            }
-        }
-
-        // Also check implicit new: HttpClient client = new(...)
         foreach (var implicitNew in root.DescendantNodes().OfType<ImplicitObjectCreationExpressionSyntax>())
         {
             ct.ThrowIfCancellationRequested();
 
-            if (implicitNew.Parent is EqualsValueClauseSyntax { Parent: VariableDeclaratorSyntax { Parent: VariableDeclarationSyntax declaration } })
+            if (implicitNew.Parent is EqualsValueClauseSyntax { Parent: VariableDeclaratorSyntax { Parent: VariableDeclarationSyntax declaration } }
+                && IsTargetType(declaration.Type.ToString()))
             {
-                var typeName = declaration.Type.ToString();
-                if (typeName is "HttpClient" or "System.Net.Http.HttpClient")
-                {
-                    var line = implicitNew.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
-                    yield return new AntiPatternViolation(
-                        "AP003",
-                        AntiPatternSeverity.Warning,
-                        "Direct HttpClient instantiation — causes socket exhaustion under load",
-                        filePath,
-                        line,
-                        "Use IHttpClientFactory instead");
-                }
+                var line = implicitNew.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
+                yield return new AntiPatternViolation(
+                    Id, AntiPatternSeverity.Warning, Message, filePath, line, Suggestion);
             }
         }
     }
